@@ -32,7 +32,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         super.onCreate(savedInstanceState)
         Log.i(GenTag,"onCreate:")
 
-            setContentView(R.layout.fragment_layout)
+        setContentView(R.layout.fragment_layout)
 
         setSupportActionBar(findViewById(R.id.chat_toolbar))
 

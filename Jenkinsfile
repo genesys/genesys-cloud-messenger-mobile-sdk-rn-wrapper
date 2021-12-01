@@ -2,9 +2,6 @@
 import com.genesys.jenkins.Service
 
 def notifications = null
-String[] mailingList = [
-  "Brian.Dupuis@genesys.com"
-]
 
 def isReleaseBranch() {
     return env.SHORT_BRANCH.equals('main');
@@ -29,6 +26,21 @@ pipeline {
   }
 
   stages {
+    stage('Setup mailing list parameter') {
+      steps {
+        script {
+          properties([
+            parameters([
+              string(
+                defaultValue: '',
+                name: 'EMAIL_LIST',
+                trim: true
+              )
+            ])
+          ])
+        }
+      }
+    }
     stage('Import notifications lib') {
       steps {
         script {
@@ -83,18 +95,18 @@ pipeline {
       steps {
           dir(env.REPO_DIR) {
           sh '''
-             echo "registry=https://registry.npmjs.org" > ./.npmrc
-             echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ./.npmrc
+              echo "registry=https://registry.npmjs.org" > ./.npmrc
+              echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ./.npmrc
           '''
           sh "${env.WORKSPACE}/${env.NPM_UTIL_PATH}/scripts/auto-version-bump.sh"
           
-          # Do not include the npm-utils directory or the publish credentials in the published package.
-          echo "npm-utils" >> .npmignore
-          npm publish --dry-run 1>&2
+          // Do not include the npm-utils directory or the publish credentials in the published package.
+          sh '''
+              echo "npm-utils" >> .npmignore
+              npm publish 1>&2
+          '''
           sshagent (credentials: ['3aa16916-868b-4290-a9ee-b1a05343667e']) {
-            sh '''
-                git push --tags -u origin ${env.SHORT_BRANCH}"
-            '''
+            sh "git push --tags -u origin ${env.SHORT_BRANCH}"
           }
         }
       }
@@ -104,13 +116,13 @@ pipeline {
   post {
     fixed {
       script {
-        notifications.emailResults(mailingList.join(" "))
+        notifications.emailResults(params.EMAIL_LIST)
       }
     }
 
     failure {
       script {
-        notifications.emailResults(mailingList.join(" "))
+        notifications.emailResults(params.EMAIL_LIST)
       }
     }
   }

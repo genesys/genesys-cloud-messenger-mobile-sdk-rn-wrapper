@@ -10,14 +10,14 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.integration.core.StateEvent
-import com.nanorep.convesationui.messenger.MessengerAccount
-import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.convesationui.structure.controller.ChatEventListener
-import com.nanorep.convesationui.structure.controller.ChatLoadResponse
-import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.nanoengine.AccountInfo
-import com.nanorep.sdkcore.utils.NRError
+import com.genesys.cloud.core.utils.NRError
+import com.genesys.cloud.integration.core.AccountInfo
+import com.genesys.cloud.integration.core.StateEvent
+import com.genesys.cloud.ui.messenger.MessengerAccount
+import com.genesys.cloud.ui.structure.controller.ChatController
+import com.genesys.cloud.ui.structure.controller.ChatEventListener
+import com.genesys.cloud.ui.structure.controller.ChatLoadResponse
+import com.genesys.cloud.ui.structure.controller.ChatLoadedListener
 
 class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
@@ -184,7 +184,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     companion object {
         const val CONVERSATION_FRAGMENT_TAG = "conversation_fragment"
-        const val GenTag = "GenesysCloudChatActivity"
+        const val GenTag = "GenesysChatActivity"
 
         const val DeploymentId = "deploymentId"
         const val Domain = "domain"

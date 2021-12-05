@@ -21,7 +21,7 @@ import com.genesys.cloud.ui.structure.controller.ChatLoadedListener
 
 class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
-    private var boldController: ChatController? = null
+    private var chatController: ChatController? = null
 
     private var endMenu: MenuItem? = null
 
@@ -43,7 +43,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
     override fun onStart() {
         super.onStart()
 
-        Log.i(GenTag,"onCreate: ${boldController?.isActive}")
+        Log.i(GenTag,"onCreate: ${chatController?.isActive}")
 
     }
 
@@ -61,7 +61,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     private fun createChat() {
 
-        boldController = ChatController.Builder(this).apply {
+        chatController = ChatController.Builder(this).apply {
             chatEventListener(this@GenesysCloudChatActivity)
 
         }.build(account, object : ChatLoadedListener {
@@ -89,7 +89,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
             val chatFrag = it.findFragmentByTag(CONVERSATION_FRAGMENT_TAG)
             if (chatFrag?.equals(fragment) == true) return@let
 
-            chatFrag?.let { boldController?.restoreChat(chatFrag) } ?: it.beginTransaction()
+            chatFrag?.let { chatController?.restoreChat(chatFrag) } ?: it.beginTransaction()
                 .replace(R.id.chat_container, fragment, CONVERSATION_FRAGMENT_TAG).apply {
                     addToBackStack(CONVERSATION_FRAGMENT_TAG)
                 }.commit()
@@ -104,7 +104,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 1) {
-            boldController?.endChat(true)
+            chatController?.endChat(true)
         }
         super.onBackPressed()
     }
@@ -135,7 +135,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
     }
 
     private fun destructChat() {
-        boldController?.takeUnless { it.wasDestructed }?.run {
+        chatController?.takeUnless { it.wasDestructed }?.run {
             terminateChat()
             destruct()
         }
@@ -144,7 +144,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.end_current_chat -> {
-                boldController?.endChat(false)
+                chatController?.endChat(false)
                 item.isEnabled = false
                 return true
             }

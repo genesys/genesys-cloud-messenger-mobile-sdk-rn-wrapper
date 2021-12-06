@@ -30,20 +30,17 @@ buildscript {
     // module dependency in an application project.
     // ref: https://docs.gradle.org/current/userguide/tutorial_using_tasks.html#sec:build_script_external_dependencies
     
-    // Condition removed to prevent the need to add kotlin plugin in integrating apps:
-    // if (project == rootProject) { 
-        repositories {
-            mavenCentral()
-            google()
-        }
-        dependencies {
-            // This should reflect the Gradle plugin version used by
-            // the minimum React Native version supported.
-            classpath 'com.android.tools.build:gradle:4.2.2'
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
-            classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        }
-   // }
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        // This should reflect the Gradle plugin version used by
+        // the minimum React Native version supported.
+        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+    }
 }
 
 android {

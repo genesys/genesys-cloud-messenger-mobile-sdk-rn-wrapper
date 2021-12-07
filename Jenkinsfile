@@ -93,11 +93,9 @@ pipeline {
     }
 
     stage('Publish Library') {
-      /*
       when {
         expression { isReleaseBranch()  }
       }
-      */
       steps {
         withCredentials([string(credentialsId: "${params.NPM_CREDENTIALS_ID}", variable: 'NPM_TOKEN')]) {          
           dir(env.REPO_DIR) {

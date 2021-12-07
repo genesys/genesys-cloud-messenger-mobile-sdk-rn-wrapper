@@ -114,7 +114,7 @@ In order to be able to use the chat module on android please follow the next ste
     |
     ```
 
-- Add kotlin plugin as follows:
+- Add kotlin plugin as follows
 `apply plugin: "kotlin-android"`
 
 ### ios

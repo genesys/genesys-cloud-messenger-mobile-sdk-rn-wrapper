@@ -113,9 +113,9 @@ pipeline {
             '''
             sh "${env.WORKSPACE}/${env.NPM_UTIL_PATH}/scripts/auto-version-bump.sh"
             
-            // Do not include the npm-utils directory or the publish credentials in the published package.
+            // Do not include the Jenkinsfile in the published package.
             sh '''
-                echo "npm-utils Jenkinsfile" >> .npmignore
+                echo "Jenkinsfile" >> .npmignore
                 npm publish --dry-run 1>&2
             '''
             sshagent (credentials: ["${params.GITHUB_CREDENTIALS_ID}"]) {

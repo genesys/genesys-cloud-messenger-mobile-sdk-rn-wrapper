@@ -115,7 +115,7 @@ pipeline {
             
             // Do not include the npm-utils directory or the publish credentials in the published package.
             sh '''
-                echo "npm-utils/nJenkinsfile" >> .npmignore
+                echo "npm-utils Jenkinsfile" >> .npmignore
                 npm publish --dry-run 1>&2
             '''
             sshagent (credentials: ["${params.GITHUB_CREDENTIALS_ID}"]) {

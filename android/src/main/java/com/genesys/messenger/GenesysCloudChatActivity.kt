@@ -47,9 +47,6 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     }
 
-    /**
-     * As first phase, just try to activate bot chat with the provided arguments.
-     */
     private fun initAccount() {
         account = MessengerAccount().apply {
             deploymentId = intent.getStringExtra(DeploymentId)

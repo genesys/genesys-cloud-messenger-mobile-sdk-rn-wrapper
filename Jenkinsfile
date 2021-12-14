@@ -99,11 +99,9 @@ pipeline {
     }
 
     stage('Publish Library') {
-      /*
       when {
         expression { isReleaseBranch()  }
       }
-      */
       steps {
         withCredentials([string(credentialsId: "${params.NPM_CREDENTIALS_ID}", variable: 'NPM_TOKEN')]) {          
           dir(env.REPO_DIR) {
@@ -116,7 +114,7 @@ pipeline {
             // Do not include the Jenkinsfile in the published package.
             sh '''
                 echo "Jenkinsfile" >> .npmignore
-                npm publish --dry-run 1>&2
+                npm publish 1>&2
             '''
             sshagent (credentials: ["${params.GITHUB_CREDENTIALS_ID}"]) {
               sh "git push --tags -u origin ${env.SHORT_BRANCH}"

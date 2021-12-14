@@ -33,6 +33,7 @@ pipeline {
               string(
                 defaultValue: '',
                 name: 'EMAIL_LIST',
+                description: '',
                 trim: true
               ),
               string(
@@ -114,7 +115,7 @@ pipeline {
             
             // Do not include the npm-utils directory or the publish credentials in the published package.
             sh '''
-                echo "npm-utils" >> .npmignore
+                echo "npm-utils/nJenkinsfile" >> .npmignore
                 npm publish --dry-run 1>&2
             '''
             sshagent (credentials: ["${params.GITHUB_CREDENTIALS_ID}"]) {

@@ -1,6 +1,7 @@
 package com.genesys.messenger
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,8 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         setContentView(R.layout.fragment_layout)
 
         setSupportActionBar(findViewById(R.id.chat_toolbar))
+
+        requestedOrientation = intent.getIntExtra(ScreenOrientation, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
 
         initAccount()
         createChat()
@@ -190,12 +193,14 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         const val Domain = "domain"
         const val TokenStoreKey = "tokenStoreKey"
         const val Logging = "logging"
-       
+        const val ScreenOrientation = "screenOrientation"
+
         fun intentFactory(
             deploymentId: String,
             domain: String,
             tokenStoreKey: String,
-            logging: Boolean
+            logging: Boolean,
+            screenOrientation: Int
         ): Intent {
 
             return Intent("com.intent.action.Messenger_CHAT").apply {
@@ -203,6 +208,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
                 putExtra(Domain, domain)
                 putExtra(TokenStoreKey, tokenStoreKey)
                 putExtra(Logging, logging)
+                putExtra(ScreenOrientation, screenOrientation)
             }
         }
     }

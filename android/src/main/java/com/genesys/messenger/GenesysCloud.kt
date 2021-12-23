@@ -26,6 +26,12 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
         }
     }
 
+    /**
+     * Request screen orientation
+     * > Values < -1 or >= 14 are handled as ActivityInfo.SCREEN_ORIENTATION_LOCKED
+     *
+     * @param orientation
+     */
     @ReactMethod
     fun requestScreenOrientation(orientation:Int){
         screenOrientation = orientation
@@ -35,7 +41,7 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
         val constants: MutableMap<String, Any> = HashMap()
         constants["SCREEN_ORIENTATION_PORTRAIT"] = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         constants["SCREEN_ORIENTATION_LANDSCAPE"] = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        constants["SCREEN_ORIENTATION_NONE"] = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        constants["SCREEN_ORIENTATION_UNSPECIFIED"] = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         constants["SCREEN_ORIENTATION_LOCKED"] = ActivityInfo.SCREEN_ORIENTATION_LOCKED
         return constants
     }

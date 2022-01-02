@@ -180,10 +180,14 @@ Before `startChat` is called, use `GenesysCloud.requestScreenOrientation()` API 
 - SCREEN_ORIENTATION_UNSPECIFIED 
 - SCREEN_ORIENTATION_LOCKED
 
-> i.e.: `GenesysCloud.requestScreenOrientation(GenesysCloud.getConstants().SCREEN_ORIENTATION_LOCKED)`
+```javascript
+// E.g.
+GenesysCloud.requestScreenOrientation(   
+                    GenesysCloud.getConstants().SCREEN_ORIENTATION_LOCKED)
+```
 
    
-   
+
 ## License
 
 MIT

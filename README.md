@@ -170,6 +170,20 @@ Call `startChat` to get the messenging view and start conversation with an agent
 GenesysCloud.startChat(deploymentId, domain, tokenStoreKey, logging);
 ```
 
+
+## Android 
+### Configure chat screen orientation
+Before `startChat` is called, use `GenesysCloud.requestScreenOrientation()` API to set the chat orientation to one of the available options provided by `GenesysCloud.getConstants()`.
+
+- SCREEN_ORIENTATION_PORTRAIT 
+- SCREEN_ORIENTATION_LANDSCAPE 
+- SCREEN_ORIENTATION_UNSPECIFIED 
+- SCREEN_ORIENTATION_LOCKED
+
+> i.e.: `GenesysCloud.requestScreenOrientation(GenesysCloud.getConstants().SCREEN_ORIENTATION_LOCKED)`
+
+   
+   
 ## License
 
 MIT

@@ -9,7 +9,7 @@
         <activity
             android:name="com.genesys.messenger.GenesysCloudChatActivity"
             android:exported="true"
-            android:configChanges="screenLayout|screenSize">
+            android:configChanges="orientation|screenLayout|screenSize" >
             <intent-filter>
                 <action android:name="com.intent.action.Messenger_CHAT"/>
                 <category android:name="android.intent.category.DEFAULT" />

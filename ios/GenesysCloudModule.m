@@ -43,7 +43,14 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 
 - (void)startChatWithAccount:(MessengerAccount *)account {
     self.chatController = [[ChatController alloc] initWithAccount:account];
+    [self setupInitialConfigurations];
     self.chatController.delegate = self;
+}
+
+- (void)setupInitialConfigurations {
+    self.chatController.viewConfiguration.incomingBotConfig.avatar = nil;
+    self.chatController.viewConfiguration.incomingLiveConfig.avatar = nil;
+    self.chatController.viewConfiguration.outgoingConfig.avatar = nil;
 }
 
 - (void)doneButtonPressed {

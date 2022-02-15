@@ -1,13 +1,31 @@
 package com.genesys.messenger
 
 import android.content.pm.ActivityInfo
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.genesys.cloud.core.utils.NRError
+
+
+class OnEventListener(val onError: (NRError) -> Unit) {}
 
 
 class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
     private var screenOrientation: Int = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+    private val eventListener = OnEventListener { error ->
+
+        val event = Arguments.createMap().apply {
+            putString("errorCode", error.errorCode)
+            putString("reason", error.reason)
+            putString("message", error.description)
+        }
+
+        reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit("onError", event)
+    }
 
     override fun getName(): String {
         return "GenesysCloud"
@@ -17,11 +35,8 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
     fun startChat(deploymentId: String, domain: String, tokenStoreKey: String, logging: Boolean) {
         reactApplicationContext.let {
             currentActivity?.run {
-                startActivity(
-                    GenesysCloudChatActivity.intentFactory(
-                        deploymentId, domain, tokenStoreKey, logging, screenOrientation
-                    )
-                );
+                startActivity(GenesysCloudChatActivity.intentFactory(deploymentId, domain, tokenStoreKey, logging,
+                    screenOrientation, eventListener));
             }
         }
     }
@@ -33,7 +48,7 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
      * @param orientation
      */
     @ReactMethod
-    fun requestScreenOrientation(orientation:Int){
+    fun requestScreenOrientation(orientation: Int) {
         screenOrientation = orientation
     }
 

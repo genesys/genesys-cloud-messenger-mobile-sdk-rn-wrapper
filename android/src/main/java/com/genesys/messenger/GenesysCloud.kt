@@ -10,17 +10,17 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.genesys.cloud.core.utils.NRError
 
 
-fun ReactContext?.onError(error: NRError) {
+internal fun ReactContext?.emitError(error: NRError) {
     this?:return
 
-    val event = Arguments.createMap().apply {
+    val error = Arguments.createMap().apply {
         putString("errorCode", error.errorCode)
         putString("reason", error.reason)
         putString("message", error.description)
     }
 
     getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        ?.emit("onError", event)
+        ?.emit("onMessengerError", error)
 }
 
 
@@ -59,6 +59,10 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
         constants["SCREEN_ORIENTATION_LANDSCAPE"] = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         constants["SCREEN_ORIENTATION_UNSPECIFIED"] = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         constants["SCREEN_ORIENTATION_LOCKED"] = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+
+        constants["ConfigurationsError"] = NRError.ConfigurationsError
+        constants["ForbiddenError"] = NRError.ForbiddenError
+
         return constants
     }
 

@@ -41,7 +41,7 @@ class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
 
         requestedOrientation = intent.getIntExtra(ScreenOrientation, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
 
-        onError = reactInstanceManager.currentReactContext::onError
+        onError = reactInstanceManager.currentReactContext::emitError
 
         initAccount()
 

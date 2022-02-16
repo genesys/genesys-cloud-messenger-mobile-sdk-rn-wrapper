@@ -150,7 +150,7 @@ dependencies {
     implementation("com.genesys.cloud:accessibility:5.0.2.rc1")
     implementation("com.genesys.cloud:core:5.0.2.rc1") 
     implementation("com.genesys.cloud:chatintegration:5.0.2.rc1") 
-    implementation("com.genesys.cloud:ui:5.0.2.rc1")
+    implementation("com.genesys.cloud:ui:5.0.2.rc2")
 
     implementation 'com.google.android.material:material:1.4.0'
 }

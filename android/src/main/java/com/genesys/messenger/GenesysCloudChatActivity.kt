@@ -4,16 +4,14 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.facebook.react.ReactActivity
 import com.genesys.cloud.core.utils.NRError
-import com.genesys.cloud.core.utils.toast
 import com.genesys.cloud.integration.core.AccountInfo
 import com.genesys.cloud.integration.core.StateEvent
 import com.genesys.cloud.integration.messenger.MessengerAccount
@@ -22,7 +20,7 @@ import com.genesys.cloud.ui.structure.controller.ChatEventListener
 import com.genesys.cloud.ui.structure.controller.ChatLoadResponse
 import com.genesys.cloud.ui.structure.controller.ChatLoadedListener
 
-class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
+class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
 
     private var chatController: ChatController? = null
 
@@ -30,7 +28,8 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     lateinit var account: AccountInfo
 
-    private var onError: ((NRError) -> Unit)? = null
+    private lateinit var onError: ((NRError) -> Unit)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +41,10 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
         requestedOrientation = intent.getIntExtra(ScreenOrientation, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
 
-        //        onError = (intent.getParcelableExtra<ChatListener>(ErrorListener) as ChatListener)::onError
-        onError = eventListener.onError
+        onError = reactInstanceManager.currentReactContext::onError
 
         initAccount()
+
         createChat()
     }
 
@@ -75,7 +74,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
                 }
 
                 error?.let {
-                    Log.e(GenTag, "!!! Messenger chat : $it")
+                    Log.e(GenTag, "!!! Failed to start Messenger chat : $it")
                     finish()
                     onError(it)
 
@@ -104,7 +103,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         super.onError(error)
         Log.e(GenTag, error.description ?: error.reason ?: error.errorCode)
 
-        onError?.invoke(error)
+        onError.invoke(error)
     }
 
     override fun onBackPressed() {
@@ -195,14 +194,10 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         const val TokenStoreKey = "tokenStoreKey"
         const val Logging = "logging"
         const val ScreenOrientation = "screenOrientation"
-        const val ErrorListener = "errorListener"
 
-        var eventListener: OnEventListener = OnEventListener { }
 
-        fun intentFactory(deploymentId: String, domain: String, tokenStoreKey: String, logging: Boolean,
-            screenOrientation: Int, errorListener: OnEventListener): Intent {
-
-            eventListener = errorListener
+        fun intentFactory(deploymentId: String, domain: String, tokenStoreKey: String,
+                            logging: Boolean, screenOrientation: Int): Intent {
 
             return Intent("com.intent.action.Messenger_CHAT").apply {
                 putExtra(DeploymentId, deploymentId)
@@ -210,7 +205,6 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
                 putExtra(TokenStoreKey, tokenStoreKey)
                 putExtra(Logging, logging)
                 putExtra(ScreenOrientation, screenOrientation)
-            //                putExtra(ErrorListener, errorListener as Parcelable)
             }
         }
     }

@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/genesys/genesys-cloud-messenger-mobile-sdk-rn-wrapper.git', :tag => '#{s.version}' }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.dependency 'React-Core'
-  s.dependency 'GenesysCloud', '4.0.0'
+  s.dependency 'GenesysCloud', '4.0.1'
   s.static_framework = true
 end

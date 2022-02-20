@@ -11,6 +11,7 @@
 // MARK: - Properties
 /************************************************************/
 @property (nonatomic, strong) ChatController *chatController;
+@property (nonatomic, readonly) BOOL emitterHasListeners;
 @end
 
 @implementation GenesysCloudModule
@@ -43,10 +44,18 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 
 - (void)startChatWithAccount:(MessengerAccount *)account {
     self.chatController = [[ChatController alloc] initWithAccount:account];
+    [self setupInitialConfigurations];
     self.chatController.delegate = self;
 }
 
+- (void)setupInitialConfigurations {
+    self.chatController.viewConfiguration.incomingBotConfig.avatar = nil;
+    self.chatController.viewConfiguration.incomingLiveConfig.avatar = nil;
+    self.chatController.viewConfiguration.outgoingConfig.avatar = nil;
+}
+
 - (void)doneButtonPressed {
+    [self.chatController endChat];
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     [rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -63,4 +72,33 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
     [rootViewController presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)didFailWithError:(BLDError *)error {
+    if (_emitterHasListeners) {
+        [self sendEventWithName:@"onMessengerError" body:@{
+            @"errorCode": error.error.domain,
+            @"reason": @(error.error.code).stringValue,
+            @"message": error.error.userInfo[@"reason"]
+        }];
+    }
+}
+
+/************************************************************/
+// MARK: - RCTEventEmitter
+/************************************************************/
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"onMessengerError"];
+}
+
+// Will be called when this module's first listener is added.
+- (void)startObserving {
+    _emitterHasListeners = YES;
+}
+
+// Will be called when this module's last listener is removed, or on dealloc.
+- (void)stopObserving {
+    _emitterHasListeners = NO;
+}
+
 @end
+

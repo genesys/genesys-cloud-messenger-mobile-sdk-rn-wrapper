@@ -171,17 +171,20 @@ GenesysCloud.startChat(deploymentId, domain, tokenStoreKey, logging);
 ```
 
 ### Listen to chat events
-The wrapper allows listenning to events raised on the chat. Currently only `error` events are supported.   
+The wrapper allows listenning to events raised on the chat. 
+>Currently only `error` events are supported.
+   
 In order to register to those events, add the following to your App:
 
 ```javascript
-import { DeviceEventEmitter } from 'react-native';
+import { DeviceEventEmitter, NativeEventEmitter } from 'react-native';
 
+const eventEmitter = Platform.OS ===  'android' ? DeviceEventEmitter : new NativeEventEmitter(GenesysCloud)
 //Adds a listener to messenger chat errors.
-DeviceEventEmitter.addListener('onMessengerError', (error) => {});
+eventEmitter.addListener('onMessengerError', (error) => {});
 ```
  
-- Error event has of the following format: `{errorCode:"", reason:"", message:""}`
+>Error event has of the following format: `{errorCode:"", reason:"", message:""}`
 
 
 ## Android 

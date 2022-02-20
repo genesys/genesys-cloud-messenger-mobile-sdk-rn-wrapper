@@ -173,27 +173,48 @@ GenesysCloud.startChat(deploymentId, domain, tokenStoreKey, logging);
 
 ### chat-events
 The wrapper allows listenning to events raised on the chat. 
-- Currently only `error` events are supported.
 
-> Error event has the following format: `{errorCode:"", reason:"", message:""}` 
+- Error events
+  Error event has the following format: `{errorCode:"", reason:"", message:""}` 
 
+- State events
+  Currently only `started` and `ended` are supported.
+  State event has the following format: `{state:""}` 
 
 In order to register to chat events, add the following to your App:
 
 ```javascript
 import { DeviceEventEmitter, NativeEventEmitter } from 'react-native';
 
+// Create event emitter to subscribe to chat events
 const eventEmitter = Platform.OS ===  'android' ? DeviceEventEmitter : new NativeEventEmitter(GenesysCloud)
 
-// When starting the chat, make sure to subscribe to it's error events:
+//-> Before calling to startChat, make sure to subscribe to chat events.
 
-//Adds a listener to messenger chat errors.
-const eventListener = eventEmitter.addListener('onMessengerError', (error) => {});
+// Adds a listener to messenger chat errors.
+listeners['onMessengerError'] = eventEmitter.addListener('onMessengerError', (error) => {});
 
-// notice! listener must be removed when chat chat was removed.
-if (eventListener) eventListener.remove(); 
+// Adds a listener to messenger chat state events.
+listeners['onMessengerState'] = eventEmitter.addListener('onMessengerState', (state)=>{});
+
+//-> Once the chat was ended, the listeners should be removed.
+listeners['onMessengerError'].remove();
+listeners['onMessengerState'].remove();
+
+
+// E.g. Usage of the `ended` state event to remove chat listeners:  
+const onStateChanged = (state) => {
+    if(state.state == 'ended'){
+        Object.keys(listeners).forEach((key)=>{
+            const listener = listeners[key]
+            console.log(`removing listener: ${key}`);
+            if(listener) listener.remove();
+        })
+    }
+};
 ```
-##### Checkout [Sample Application](https://github.com/genesys/MobileDxRNSample/blob/master/App.js) for more details
+
+#### 👉 Checkout [Sample Application](https://github.com/genesys/MobileDxRNSample/blob/master/App.js) for more details
 
 ---
 

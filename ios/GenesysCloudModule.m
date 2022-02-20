@@ -82,12 +82,27 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
     }
 }
 
+- (void)didUpdateState:(ChatStateEvent *)event {
+    NSString *state;
+    if (event.state == ChatStarted) {
+        state = @"started";
+    } else if (event.state == ChatEnded) {
+        state = @"ended";
+    }
+    
+    if (_emitterHasListeners && state.length) {
+        [self sendEventWithName:@"onMessengerState" body:@{
+            @"state": state
+        }];
+    }
+}
+
 /************************************************************/
 // MARK: - RCTEventEmitter
 /************************************************************/
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"onMessengerError"];
+    return @[@"onMessengerError", @"onMessengerState"];
 }
 
 // Will be called when this module's first listener is added.

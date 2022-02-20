@@ -23,6 +23,16 @@ internal fun ReactContext?.emitError(error: NRError) {
         ?.emit("onMessengerError", error)
 }
 
+internal fun ReactContext?.emitState(state: String) {
+    this?:return
+
+    val state = Arguments.createMap().apply {
+        putString("state", state)
+    }
+
+    getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        ?.emit("onMessengerState", state)
+}
 
 class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 

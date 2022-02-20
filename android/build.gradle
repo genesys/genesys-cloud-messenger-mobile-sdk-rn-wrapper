@@ -147,10 +147,10 @@ dependencies {
     implementation "com.facebook.fbjni:fbjni-java-only:0.0.4"
     implementation "com.facebook.yoga:proguard-annotations:1.19.0"
 
-    implementation("com.genesys.cloud:accessibility:5.0.2.rc1")
+    implementation("com.genesys.cloud:accessibility:5.0.2.rc2")
     implementation("com.genesys.cloud:core:5.0.2.rc1") 
-    implementation("com.genesys.cloud:chatintegration:5.0.2.rc1") 
-    implementation("com.genesys.cloud:ui:5.0.2.rc2")
+    implementation("com.genesys.cloud:chatintegration:5.0.2.rc2") 
+    implementation("com.genesys.cloud:ui:5.0.2.rc4")
 
     implementation 'com.google.android.material:material:1.4.0'
 }

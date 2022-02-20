@@ -9,18 +9,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.facebook.react.ReactActivity
 import com.genesys.cloud.core.utils.NRError
 import com.genesys.cloud.integration.core.AccountInfo
 import com.genesys.cloud.integration.core.StateEvent
-import com.genesys.cloud.ui.messenger.MessengerAccount
+import com.genesys.cloud.integration.messenger.MessengerAccount
 import com.genesys.cloud.ui.structure.controller.ChatController
 import com.genesys.cloud.ui.structure.controller.ChatEventListener
 import com.genesys.cloud.ui.structure.controller.ChatLoadResponse
 import com.genesys.cloud.ui.structure.controller.ChatLoadedListener
 
-class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
+class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
 
     private var chatController: ChatController? = null
 
@@ -28,10 +28,12 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
     lateinit var account: AccountInfo
 
+    private lateinit var onError: ((NRError) -> Unit)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(GenTag,"onCreate:")
+        Log.i(GenTag, "onCreate:")
 
         setContentView(R.layout.fragment_layout)
 
@@ -39,22 +41,21 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
 
         requestedOrientation = intent.getIntExtra(ScreenOrientation, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
 
+        onError = reactInstanceManager.currentReactContext::emitError
+
         initAccount()
+
         createChat()
     }
 
     override fun onStart() {
         super.onStart()
-
-        Log.i(GenTag,"onCreate: ${chatController?.isActive}")
-
+        Log.i(GenTag, "onCreate: ${chatController?.isActive}")
     }
 
     private fun initAccount() {
-        account = MessengerAccount().apply {
-            deploymentId = intent.getStringExtra(DeploymentId)
-            domain = intent.getStringExtra(Domain)
-            tokenStoreKey = intent.getStringExtra(TokenStoreKey) 
+        account = MessengerAccount(intent.getStringExtra(DeploymentId), intent.getStringExtra(Domain)).apply {
+            tokenStoreKey = intent.getStringExtra(TokenStoreKey)
             logging = intent.getBooleanExtra(Logging, false)
         }
     }
@@ -73,7 +74,9 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
                 }
 
                 error?.let {
-                    Log.e(GenTag, "!!! Failed to load chat: $it")
+                    Log.e(GenTag, "!!! Failed to start Messenger chat : $it")
+                    finish()
+                    onError(it)
 
                 } ?: openConversationFragment((result.fragment!!))
 
@@ -99,8 +102,9 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
     override fun onError(error: NRError) {
         super.onError(error)
         Log.e(GenTag, error.description ?: error.reason ?: error.errorCode)
-    }
 
+        onError.invoke(error)
+    }
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 1) {
@@ -116,7 +120,7 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
                 finish()
             }
 
-            StateEvent.Started ->         {
+            StateEvent.Started -> {
                 findViewById<ProgressBar>(R.id.waiting)?.visibility = View.GONE
                 enableMenu(endMenu, true)
             }
@@ -124,7 +128,6 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         }
         super.onChatStateChanged(stateEvent)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -192,13 +195,9 @@ class GenesysCloudChatActivity : AppCompatActivity(), ChatEventListener {
         const val Logging = "logging"
         const val ScreenOrientation = "screenOrientation"
 
-        fun intentFactory(
-            deploymentId: String,
-            domain: String,
-            tokenStoreKey: String,
-            logging: Boolean,
-            screenOrientation: Int
-        ): Intent {
+
+        fun intentFactory(deploymentId: String, domain: String, tokenStoreKey: String,
+                            logging: Boolean, screenOrientation: Int): Intent {
 
             return Intent("com.intent.action.Messenger_CHAT").apply {
                 putExtra(DeploymentId, deploymentId)

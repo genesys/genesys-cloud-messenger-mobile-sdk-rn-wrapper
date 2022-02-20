@@ -1,12 +1,31 @@
 package com.genesys.messenger
 
 import android.content.pm.ActivityInfo
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.genesys.cloud.core.utils.NRError
+
+
+internal fun ReactContext?.emitError(error: NRError) {
+    this?:return
+
+    val error = Arguments.createMap().apply {
+        putString("errorCode", error.errorCode)
+        putString("reason", error.reason)
+        putString("message", error.description)
+    }
+
+    getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        ?.emit("onMessengerError", error)
+}
 
 
 class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
+
     private var screenOrientation: Int = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
     override fun getName(): String {
@@ -17,11 +36,8 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
     fun startChat(deploymentId: String, domain: String, tokenStoreKey: String, logging: Boolean) {
         reactApplicationContext.let {
             currentActivity?.run {
-                startActivity(
-                    GenesysCloudChatActivity.intentFactory(
-                        deploymentId, domain, tokenStoreKey, logging, screenOrientation
-                    )
-                );
+                startActivity(GenesysCloudChatActivity.intentFactory(deploymentId, domain, tokenStoreKey, logging,
+                    screenOrientation));
             }
         }
     }
@@ -33,7 +49,7 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
      * @param orientation
      */
     @ReactMethod
-    fun requestScreenOrientation(orientation:Int){
+    fun requestScreenOrientation(orientation: Int) {
         screenOrientation = orientation
     }
 
@@ -43,6 +59,10 @@ class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModul
         constants["SCREEN_ORIENTATION_LANDSCAPE"] = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         constants["SCREEN_ORIENTATION_UNSPECIFIED"] = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         constants["SCREEN_ORIENTATION_LOCKED"] = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+
+        constants["ConfigurationsError"] = NRError.ConfigurationsError
+        constants["ForbiddenError"] = NRError.ForbiddenError
+
         return constants
     }
 

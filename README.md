@@ -166,9 +166,22 @@ const { GenesysCloud } = NativeModules;
 Call `startChat` to get the messenging view and start conversation with an agent.
 
 ```javascript
-// Now the chat can be triggered using the following method activation:
+// Start a chat using the following line:
 GenesysCloud.startChat(deploymentId, domain, tokenStoreKey, logging);
 ```
+
+### Listen to chat events
+The wrapper allows listenning to events raised on the chat. Currently only `error` events are supported.   
+In order to register to those events, add the following to your App:
+
+```javascript
+import { DeviceEventEmitter } from 'react-native';
+
+//Adds a listener to messenger chat errors.
+DeviceEventEmitter.addListener('onMessengerError', (error) => {});
+```
+ 
+- Error event has of the following format: `{errorCode:"", reason:"", message:""}`
 
 
 ## Android 

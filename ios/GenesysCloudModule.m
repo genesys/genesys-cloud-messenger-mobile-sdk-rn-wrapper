@@ -74,10 +74,10 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 
 - (void)didFailWithError:(BLDError *)error {
     if (_emitterHasListeners) {
-        [self sendEventWithName:@"onMessengerEvent" body:@{
+        [self sendEventWithName:@"onMessengerError" body:@{
             @"errorCode": error.error.domain,
             @"reason": @(error.error.code).stringValue,
-            @"message": error.error.userInfo
+            @"message": error.error.userInfo[@"reason"]
         }];
     }
 }
@@ -87,7 +87,7 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 /************************************************************/
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"onMessengerEvent"];
+    return @[@"onMessengerError"];
 }
 
 // Will be called when this module's first listener is added.

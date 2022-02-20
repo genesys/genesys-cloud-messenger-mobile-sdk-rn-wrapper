@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'MIT' }
   s.authors      = 'Genesys'
   s.platforms    = { :ios => '11.0' }
-  s.source       = { :git => 'https://github.com/genesys/MobileDxRNSample', :tag => '#{s.version}' }
+  s.source       = { :git => 'https://github.com/genesys/genesys-cloud-messenger-mobile-sdk-rn-wrapper.git', :tag => '#{s.version}' }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.dependency 'React-Core'
   s.dependency 'GenesysCloud', '4.0.1'

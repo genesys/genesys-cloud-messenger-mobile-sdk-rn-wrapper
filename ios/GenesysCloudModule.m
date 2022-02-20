@@ -75,8 +75,8 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 - (void)didFailWithError:(BLDError *)error {
     if (_emitterHasListeners) {
         [self sendEventWithName:@"onMessengerEvent" body:@{
-            @"errorCode": @(error.error.code).stringValue,
-            @"reason": error.error.domain,
+            @"errorCode": error.error.domain,
+            @"reason": @(error.error.code).stringValue,
             @"message": error.error.userInfo
         }];
     }

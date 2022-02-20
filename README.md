@@ -22,6 +22,7 @@ The SDK provides a simple react native wrapper for the Genesys Cloud Messenger S
 - [Usage](#usage)
     - [Import](#import)
     - [Start Chat](#start-chat)
+    - [Chat Events](#chat-events)
 - [Sample Application](https://github.com/genesys/MobileDxRNSample)
 - [License](#license)
 
@@ -170,7 +171,7 @@ Call `startChat` to get the messenging view and start conversation with an agent
 GenesysCloud.startChat(deploymentId, domain, tokenStoreKey, logging);
 ```
 
-### Listen to chat events
+### chat-events
 The wrapper allows listenning to events raised on the chat. 
 >Currently only `error` events are supported.
    

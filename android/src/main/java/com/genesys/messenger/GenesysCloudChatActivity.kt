@@ -117,12 +117,14 @@ class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
         Log.i(GenTag, "Got Chat state: ${stateEvent.state}")
         when (stateEvent.state) {
             StateEvent.Ended -> {
+                reactInstanceManager.currentReactContext.emitState(StateEvent.Ended)
                 finish()
             }
 
             StateEvent.Started -> {
                 findViewById<ProgressBar>(R.id.waiting)?.visibility = View.GONE
                 enableMenu(endMenu, true)
+                reactInstanceManager.currentReactContext.emitState(StateEvent.Started)
             }
 
         }

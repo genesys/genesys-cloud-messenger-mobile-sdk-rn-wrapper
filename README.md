@@ -184,7 +184,7 @@ const eventEmitter = Platform.OS ===  'android' ? DeviceEventEmitter : new Nativ
 eventEmitter.addListener('onMessengerError', (error) => {});
 ```
  
->Error event has of the following format: `{errorCode:"", reason:"", message:""}`
+>Error event has the following format: `{errorCode:"", reason:"", message:""}`
 
 
 ## Android 

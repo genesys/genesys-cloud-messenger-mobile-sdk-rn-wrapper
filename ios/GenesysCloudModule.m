@@ -11,6 +11,7 @@
 // MARK: - Properties
 /************************************************************/
 @property (nonatomic, strong) ChatController *chatController;
+@property (nonatomic, readonly) BOOL emitterHasListeners;
 @end
 
 @implementation GenesysCloudModule
@@ -54,6 +55,7 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
 }
 
 - (void)doneButtonPressed {
+    [self.chatController endChat];
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     [rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -70,4 +72,33 @@ RCT_EXPORT_METHOD(startChat: (NSString *)deploymentId: (NSString *)domain: (NSSt
     [rootViewController presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)didFailWithError:(BLDError *)error {
+    if (_emitterHasListeners) {
+        [self sendEventWithName:@"onMessengerEvent" body:@{
+            @"errorCode": @(error.error.code).stringValue,
+            @"reason": error.error.domain,
+            @"message": error.error.userInfo
+        }];
+    }
+}
+
+/************************************************************/
+// MARK: - RCTEventEmitter
+/************************************************************/
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"onMessengerEvent"];
+}
+
+// Will be called when this module's first listener is added.
+- (void)startObserving {
+    _emitterHasListeners = YES;
+}
+
+// Will be called when this module's last listener is removed, or on dealloc.
+- (void)stopObserving {
+    _emitterHasListeners = NO;
+}
+
 @end
+

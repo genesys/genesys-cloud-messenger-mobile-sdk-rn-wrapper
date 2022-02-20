@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/genesys/MobileDxRNSample', :tag => '#{s.version}' }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.dependency 'React-Core'
-  s.dependency 'GenesysCloud'
+  s.dependency 'GenesysCloud', '4.0.1'
   s.static_framework = true
 end

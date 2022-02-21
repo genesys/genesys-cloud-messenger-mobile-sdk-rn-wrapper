@@ -1,7 +1,7 @@
 {
   "name": "genesys-cloud-messenger-mobile-sdk-rn-wrapper",
   "title": "Genesys Cloud Messenger Mobile SDK React Native wrapper",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "React Native wrappers to allow customers to integrate our Genesys Cloud Messenger Mobile SDK into their React Native applications",
   "main": "index.js",
   "scripts": {

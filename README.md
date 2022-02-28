@@ -145,12 +145,12 @@ In order to be able to use the chat module on iOS please follow the next steps.
         end
     ```
     >[Podfile Full Example](https://github.com/genesys/MobileDxRNSample/blob/master/ios/Podfile)
-
+    
     - **Disable `Flipper` if activated.**
     ```ruby
          # use_flipper!()
     ```
-
+   2 . Make sure you run `pod update genesys-cloud-messenger-mobile-sdk-rn-wrapper` to get latest version.
 ## Usage
 
 ### import

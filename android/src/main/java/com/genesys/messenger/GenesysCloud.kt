@@ -13,25 +13,25 @@ import com.genesys.cloud.core.utils.NRError
 internal fun ReactContext?.emitError(error: NRError) {
     this?:return
 
-    val error = Arguments.createMap().apply {
+    val emit = Arguments.createMap().apply {
         putString("errorCode", error.errorCode)
         putString("reason", error.reason)
         putString("message", error.description)
     }
 
     getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        ?.emit("onMessengerError", error)
+        ?.emit("onMessengerError", emit)
 }
 
 internal fun ReactContext?.emitState(state: String) {
     this?:return
 
-    val state = Arguments.createMap().apply {
+    val emit = Arguments.createMap().apply {
         putString("state", state)
     }
 
     getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        ?.emit("onMessengerState", state)
+        ?.emit("onMessengerState", emit)
 }
 
 class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {

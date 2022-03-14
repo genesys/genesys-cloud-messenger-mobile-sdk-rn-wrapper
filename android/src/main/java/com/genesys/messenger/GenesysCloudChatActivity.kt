@@ -54,8 +54,8 @@ class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
     }
 
     private fun initAccount() {
-        account = MessengerAccount(intent.getStringExtra(DeploymentId)?:"", intent.getStringExtra(Domain)?:"").apply {
-            tokenStoreKey = intent.getStringExtra(TokenStoreKey)?:""
+        account = MessengerAccount(intent.getStringExtra(DeploymentId, ""), intent.getStringExtra(Domain, "")).apply {
+            tokenStoreKey = intent.getStringExtra(TokenStoreKey, "")
             logging = intent.getBooleanExtra(Logging, false)
         }
     }
@@ -209,6 +209,9 @@ class GenesysCloudChatActivity : ReactActivity(), ChatEventListener {
                 putExtra(ScreenOrientation, screenOrientation)
             }
         }
-    }
 
+        private fun Intent.getStringExtra(key: String, fallback: String?): String {
+            return getStringExtra(key) ?: fallback ?: ""
+        }
+    }
 }

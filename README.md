@@ -233,7 +233,9 @@ GenesysCloud.requestScreenOrientation(
                     GenesysCloud.getConstants().SCREEN_ORIENTATION_LOCKED)
 ```
 
-   
+### MinifyEnabled and proguard rules
+If the hosting app is using the `minifyEnabled` on gradle configurations, the following line should be added to the `proguard-rules.pro` file:   
+`-keep class com.genesys.cloud.messenger.transport.shyrka.** { *; }`   
 
 ## License
 

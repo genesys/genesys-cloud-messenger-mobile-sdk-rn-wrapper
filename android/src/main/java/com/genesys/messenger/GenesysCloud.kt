@@ -1,5 +1,6 @@
 package com.genesys.messenger
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
@@ -13,25 +14,25 @@ import com.genesys.cloud.core.utils.NRError
 internal fun ReactContext?.emitError(error: NRError) {
     this?:return
 
-    val emit = Arguments.createMap().apply {
+    val event = Arguments.createMap().apply {
         putString("errorCode", error.errorCode)
         putString("reason", error.reason)
         putString("message", error.description)
     }
 
     getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        ?.emit("onMessengerError", emit)
+        ?.emit("onMessengerError", event)
 }
 
 internal fun ReactContext?.emitState(state: String) {
     this?:return
 
-    val emit = Arguments.createMap().apply {
+    val event = Arguments.createMap().apply {
         putString("state", state)
     }
 
     getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        ?.emit("onMessengerState", emit)
+        ?.emit("onMessengerState", event)
 }
 
 class GenesysCloud(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {

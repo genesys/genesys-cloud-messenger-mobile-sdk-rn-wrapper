@@ -1,3 +1,5 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 > [!WARNING]  
 > **This repo is ⛔️ DEPRECATED.**
 > This can serve as a valuable resource for code examples for creating a React Native wrapper for the Mobile Messenger SDK.

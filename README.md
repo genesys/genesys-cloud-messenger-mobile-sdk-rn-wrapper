@@ -1,5 +1,5 @@
 > [!WARNING]  
-> **This repo is deprecated.**
+> **This repo is ⛔️ DEPRECATED.**
 > This can serve as a valuable resource for code examples for creating a React Native wrapper for the Mobile Messenger SDK.
 > Please, check [Genesys documentation](https://developer.genesys.cloud/commdigital/digital/webmessaging/mobile-messaging/messenger-mobile-sdk/react-native-wrapper) for further info. 
 

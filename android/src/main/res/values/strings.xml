@@ -1,0 +1,8 @@
+<resources>
+    
+    <!-- Actions menu -->
+    <string name="end_current_chat">End current chat</string>
+    <string name="destruct_chat_controller">Destruct</string>
+    
+
+</resources>

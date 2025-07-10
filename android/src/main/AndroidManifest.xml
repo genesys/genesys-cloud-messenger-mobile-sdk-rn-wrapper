@@ -1,0 +1,20 @@
+<!-- AndroidManifest.xml -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.genesys.messenger">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application>
+        <activity
+            android:name="com.genesys.messenger.GenesysCloudChatActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenLayout|screenSize" >
+            <intent-filter>
+                <action android:name="com.intent.action.Messenger_CHAT"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

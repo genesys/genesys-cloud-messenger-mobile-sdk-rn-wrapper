@@ -1,0 +1,28 @@
+{
+  "name": "genesys-cloud-messenger-mobile-sdk-rn-wrapper",
+  "title": "Genesys Cloud Messenger Mobile SDK React Native wrapper",
+  "version": "1.3.7",
+  "description": "React Native wrappers to allow customers to integrate our Genesys Cloud Messenger Mobile SDK into their React Native applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": {
+    "name": "Genesys",
+    "email": "PureCloudApps.Support@genesys.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": ">=16.8.6",
+    "react-native": ">=0.60"
+  },
+  "devDependencies": {
+    "react": ">=16.8.6",
+    "react-native": ">=0.60"
+  }
+}
